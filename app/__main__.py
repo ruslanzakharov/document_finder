@@ -20,4 +20,4 @@ app = get_application()
 
 
 if __name__ == '__main__':
-    uvicorn.run('app.__main__:app', port=8000, host='127.0.0.1', reload=True)
+    uvicorn.run('app.__main__:app', port=8000, host='0.0.0.0', reload=True)
