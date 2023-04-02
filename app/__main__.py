@@ -29,5 +29,4 @@ app = get_application()
 
 
 if __name__ == '__main__':
-    asyncio.run(create_db())
     uvicorn.run('app.__main__:app', port=8000, host='0.0.0.0', reload=True)

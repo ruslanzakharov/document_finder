@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import (
 SQLALCHEMY_DB_URL = \
     'postgresql+asyncpg://ruslan:ruslan@postgres_db/postgres_db'
 
-engine = create_async_engine(SQLALCHEMY_DB_URL)
+engine = create_async_engine(SQLALCHEMY_DB_URL, echo=True)
 AsyncSessionLocal = async_sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False)
 
@@ -21,7 +21,7 @@ async def get_session() -> AsyncSession:
         yield session
 
 
-async def create_db():
+async def create_db() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)

@@ -8,32 +8,32 @@ association_table = Table(
     'association_table',
     Base.metadata,
     Column('document_id', ForeignKey('document.id'), primary_key=True),
-    Column('rubrics_id', ForeignKey('rubrics.id'), primary_key=True)
+    Column('rubric_id', ForeignKey('rubric.id'), primary_key=True)
 )
 
 
-class Documents(Base):
-    __tablename__ = 'documents'
+class Document(Base):
+    __tablename__ = 'document'
 
     id = Column(Integer, primary_key=True)
     text = Column(String)
     creation_date = Column(DateTime)
 
     rubrics = relationship(
-        'Rubrics',
+        'Rubric',
         secondary=association_table,
         back_populates='documents'
     )
 
 
-class Rubrics(Base):
-    __tablename__ = 'rubrics'
+class Rubric(Base):
+    __tablename__ = 'rubric'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
     documents = relationship(
-        'Documents',
+        'Document',
         secondary=association_table,
         back_populates='rubrics'
     )
