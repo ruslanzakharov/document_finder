@@ -1,0 +1,21 @@
+services:
+  document_finder:
+    build: .
+    restart: always
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/document_finder
+
+  postgres_db:
+    image: postgres:15
+    restart: always
+    volumes:
+      - postgres_document_finder:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ruslan
+      POSTGRES_PASSWORD: ruslan
+      POSTGRES_DB: postgres_db
+
+volumes:
+  postgres_document_finder:
