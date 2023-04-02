@@ -38,7 +38,7 @@ async def create_rubric(
 
 
 async def create_rubrics(
-        names: list[Rubric],
+        names: list[str],
         session: AsyncSession
 ) -> list[Rubric]:
     return [await create_rubric(name, session) for name in names]
