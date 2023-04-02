@@ -7,17 +7,17 @@ from app.db import Base
 association_table = Table(
     'association_table',
     Base.metadata,
-    Column('document_id', ForeignKey('document.id'), primary_key=True),
-    Column('rubric_id', ForeignKey('rubric.id'), primary_key=True)
+    Column('document_id', ForeignKey('documents.id'), primary_key=True),
+    Column('rubric_id', ForeignKey('rubrics.id'), primary_key=True)
 )
 
 
 class Document(Base):
-    __tablename__ = 'document'
+    __tablename__ = 'documents'
 
     id = Column(Integer, primary_key=True)
     text = Column(String)
-    creation_date = Column(DateTime)
+    created_date = Column(DateTime)
 
     rubrics = relationship(
         'Rubric',
@@ -27,7 +27,7 @@ class Document(Base):
 
 
 class Rubric(Base):
-    __tablename__ = 'rubric'
+    __tablename__ = 'rubrics'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)

@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-import datetime as dt
+from sqlalchemy import select
 
 from app.db import Document, Rubric
-from app import schemas
+from app import schemas, utils
 
 
 async def create_document(
@@ -14,7 +14,7 @@ async def create_document(
     document = Document(
         text=post_schema.text,
         rubrics=rubrics,
-        created_date=dt.datetime.now()
+        created_date=utils.cur_datetime()
     )
     session.add(document)
     await session.commit()
@@ -26,7 +26,8 @@ async def create_rubric(
         name: str,
         session: AsyncSession
 ) -> Rubric:
-    rubric = session.query(Rubric).filter_by(name=name).first()
+    query = select(Rubric).where(Rubric.name == name)
+    rubric = (await session.execute(query)).first()
 
     if rubric is None:
         rubric = Rubric(name=name)
