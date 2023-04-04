@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from app.api.v1 import routers
 from app.db import create_db
-from app.es import create_document_index, wait_connection_to_es
+from app.es import init_es
 
 
 def bind_routers(application: FastAPI) -> None:
@@ -14,8 +14,7 @@ def bind_routers(application: FastAPI) -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    wait_connection_to_es()
-    create_document_index()
+    init_es()
     await create_db()
 
     yield

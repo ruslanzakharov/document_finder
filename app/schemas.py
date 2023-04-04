@@ -1,8 +1,5 @@
 from pydantic import BaseModel
 from datetime import datetime as dt
-from typing import Type
-
-from app.db import Rubric
 
 
 class DocumentCreateRequest(BaseModel):
@@ -26,3 +23,7 @@ class DocumentResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class SearchResponse(BaseModel):
+    documents: list[DocumentResponse]
