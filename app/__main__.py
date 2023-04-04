@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 import uvicorn
-import asyncio
 from contextlib import asynccontextmanager
 
 from app.api.v1 import routers
 from app.db import create_db
+from app.es import create_document_index, wait_connection_to_es
 
 
 def bind_routers(application: FastAPI) -> None:
@@ -14,7 +14,10 @@ def bind_routers(application: FastAPI) -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    wait_connection_to_es()
+    create_document_index()
     await create_db()
+
     yield
 
 
@@ -26,7 +29,6 @@ def get_application() -> FastAPI:
 
 
 app = get_application()
-
 
 if __name__ == '__main__':
     uvicorn.run('app.__main__:app', port=8000, host='0.0.0.0', reload=True)

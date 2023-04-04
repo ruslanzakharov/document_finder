@@ -6,6 +6,9 @@ services:
       - 8000:8000
     volumes:
       - ./:/document_finder
+    depends_on:
+      - elasticsearch
+      - postgres_db
 
   postgres_db:
     image: postgres:15
