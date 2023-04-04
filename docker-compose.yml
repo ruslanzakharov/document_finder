@@ -17,5 +17,18 @@ services:
       POSTGRES_PASSWORD: ruslan
       POSTGRES_DB: postgres_db
 
+  elasticsearch:
+    image: elasticsearch:8.6.2
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.enabled=false
+    restart: always
+    ports:
+      - 9200:9200
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+
 volumes:
   postgres_document_finder:
+  es_data:
