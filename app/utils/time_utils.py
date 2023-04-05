@@ -16,7 +16,8 @@ def cur_datetime() -> dt:
         month=dt_now.month,
         day=dt_now.day,
         hour=dt_now.hour,
-        minute=dt_now.minute
+        minute=dt_now.minute,
+        second=dt_now.second
     )
 
     return formatted_dt_now

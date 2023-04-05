@@ -16,7 +16,6 @@ def bind_routers(application: FastAPI) -> None:
 async def lifespan(app: FastAPI):
     init_es()
     await create_db()
-
     yield
 
 

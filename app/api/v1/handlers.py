@@ -4,9 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from elasticsearch import Elasticsearch
 
 from app import schemas
-from app.db import storage, get_session
+from app.db import get_session
 from app.es import get_es_client
-from app.utils import get_bd_search_response
+from app import utils
 
 search_router = APIRouter(prefix='/v1/documents')
 
@@ -21,7 +21,7 @@ async def search_documents(
         session: AsyncSession = Depends(get_session),
         es_client: Elasticsearch = Depends(get_es_client)
 ):
-    documents = await get_bd_search_response(q, session, es_client)
+    documents = await utils.get_bd_search_response(q, session, es_client)
     return {'documents': documents}
 
 
@@ -32,7 +32,8 @@ async def search_documents(
 )
 async def create_document(
         post_schema: schemas.DocumentCreateRequest,
-        session: AsyncSession = Depends(get_session)
+        session: AsyncSession = Depends(get_session),
+        es_client: Elasticsearch = Depends(get_es_client)
 ):
-    document = await storage.create_document(post_schema, session)
+    document = await utils.create_document(post_schema, session, es_client)
     return document

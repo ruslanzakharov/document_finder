@@ -49,16 +49,29 @@ def create_document_index() -> None:
     es_client.transport.close()
 
 
+def delete_document_index() -> None:
+    """Удаляет индекс в Elasticsearch."""
+    es_client = Elasticsearch(ES_HOST)
+
+    try:
+        es_client.indices.delete(index=ES_INDEX)
+    except elasticsearch.NotFoundError:
+        pass
+
+    es_client.transport.close()
+
+
 def wait_connection_to_es() -> None:
     """Останавливает запуск приложения, пока не заработает Elasticsearch."""
     es_client = Elasticsearch(ES_HOST)
-    while not es_client:
+    while not es_client.ping():
         time.sleep(0.5)
     es_client.transport.close()
 
 
 def init_es() -> None:
     wait_connection_to_es()
+    delete_document_index()
     create_document_index()
 
 

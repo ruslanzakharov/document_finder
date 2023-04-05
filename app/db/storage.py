@@ -27,7 +27,7 @@ async def create_rubric(
         session: AsyncSession
 ) -> Rubric:
     query = select(Rubric).where(Rubric.name == name)
-    rubric = (await session.execute(query)).first()
+    rubric = (await session.execute(query)).scalar()
 
     if rubric is None:
         rubric = Rubric(name=name)
