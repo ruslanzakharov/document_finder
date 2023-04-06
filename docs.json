@@ -1,0 +1,263 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "FastAPI",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/v1/documents/search": {
+            "get": {
+                "summary": "Search Documents",
+                "operationId": "search_documents_v1_documents_search_get",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Q",
+                            "type": "string",
+                            "default": ""
+                        },
+                        "name": "q",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/documents": {
+            "post": {
+                "summary": "Create Document",
+                "operationId": "create_document_v1_documents_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DocumentCreateRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DocumentResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/documents/{document_id}": {
+            "delete": {
+                "summary": "Delete Document",
+                "operationId": "delete_document_v1_documents__document_id__delete",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Document Id",
+                            "type": "integer"
+                        },
+                        "name": "document_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "404": {
+                        "description": "Template not found"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "DocumentCreateRequest": {
+                "title": "DocumentCreateRequest",
+                "required": [
+                    "rubrics",
+                    "text"
+                ],
+                "type": "object",
+                "properties": {
+                    "rubrics": {
+                        "title": "Rubrics",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "text": {
+                        "title": "Text",
+                        "type": "string"
+                    },
+                    "created_date": {
+                        "title": "Created Date",
+                        "type": "string"
+                    }
+                }
+            },
+            "DocumentResponse": {
+                "title": "DocumentResponse",
+                "required": [
+                    "id",
+                    "text",
+                    "rubrics",
+                    "created_date"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "text": {
+                        "title": "Text",
+                        "type": "string"
+                    },
+                    "rubrics": {
+                        "title": "Rubrics",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RubricResponse"
+                        }
+                    },
+                    "created_date": {
+                        "title": "Created Date",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "HTTPValidationError": {
+                "title": "HTTPValidationError",
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "title": "Detail",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        }
+                    }
+                }
+            },
+            "RubricResponse": {
+                "title": "RubricResponse",
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "title": "Name",
+                        "type": "string"
+                    }
+                }
+            },
+            "SearchResponse": {
+                "title": "SearchResponse",
+                "required": [
+                    "documents"
+                ],
+                "type": "object",
+                "properties": {
+                    "documents": {
+                        "title": "Documents",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DocumentResponse"
+                        }
+                    }
+                }
+            },
+            "ValidationError": {
+                "title": "ValidationError",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "loc": {
+                        "title": "Location",
+                        "type": "array",
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        }
+                    },
+                    "msg": {
+                        "title": "Message",
+                        "type": "string"
+                    },
+                    "type": {
+                        "title": "Error Type",
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
