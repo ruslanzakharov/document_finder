@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 from sqlalchemy.ext.asyncio import AsyncSession
-from elasticsearch import Elasticsearch
 
 from app import schemas
 from app.db import get_session, storage
-from app.es import get_es_client
 from app import utils
+from app.es import es_client
 
 search_router = APIRouter(prefix='/v1/documents')
 
@@ -19,7 +18,6 @@ search_router = APIRouter(prefix='/v1/documents')
 async def search_documents(
         q: str = '',
         session: AsyncSession = Depends(get_session),
-        es_client: Elasticsearch = Depends(get_es_client)
 ):
     documents = await utils.get_bd_search_response(q, session, es_client)
     return {'documents': documents}
@@ -33,7 +31,6 @@ async def search_documents(
 async def create_document(
         post_schema: schemas.DocumentCreateRequest,
         session: AsyncSession = Depends(get_session),
-        es_client: Elasticsearch = Depends(get_es_client)
 ):
     document = await utils.create_document(post_schema, session, es_client)
     return document
@@ -51,7 +48,6 @@ async def create_document(
 async def delete_document(
         document_id: int,
         session: AsyncSession = Depends(get_session),
-        es_client: Elasticsearch = Depends(get_es_client)
 ):
     document = await storage.get_document(document_id, session)
 

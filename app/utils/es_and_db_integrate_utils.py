@@ -10,7 +10,7 @@ async def get_bd_search_response(
         query: str, session: AsyncSession, es_client: Elasticsearch
 ) -> list[Document]:
     """Возвращает по поисковому запросу отсортированные объекты БД."""
-    hits = es_search(query, es_client)
+    hits = await es_search(query, es_client)
 
     documents = []
     for hit in hits:
@@ -30,7 +30,7 @@ async def create_document(
 ) -> Document:
     """Создает документ в ElastSearch и БД."""
     document = await storage.create_document(post_schema, session)
-    create_es_document(
+    await create_es_document(
         document_id=document.id,
         text=document.text,
         es_client=es_client
@@ -45,4 +45,4 @@ async def delete_document(
         es_client: Elasticsearch
 ) -> None:
     await storage.delete_document(document_id, session)
-    delete_es_document(document_id, es_client)
+    await delete_es_document(document_id, es_client)

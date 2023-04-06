@@ -3,7 +3,7 @@ from elasticsearch import Elasticsearch
 from app.es import ES_INDEX
 
 
-def es_search(query: str, es_client: Elasticsearch) -> list[dict]:
+async def es_search(query: str, es_client: Elasticsearch) -> list[dict]:
     """Возвращает поисковый ответ от ElastSearch."""
     es_query = {
         'match': {
@@ -16,7 +16,7 @@ def es_search(query: str, es_client: Elasticsearch) -> list[dict]:
         }
     }
 
-    resp = es_client.search(
+    resp = await es_client.search(
         index=ES_INDEX,
         query=es_query,
         sort=es_sort,
@@ -26,10 +26,10 @@ def es_search(query: str, es_client: Elasticsearch) -> list[dict]:
     return hits
 
 
-def create_es_document(
+async def create_es_document(
         document_id: int, text: str, es_client: Elasticsearch
 ) -> None:
-    es_client.index(
+    await es_client.index(
         index=ES_INDEX,
         document={
             'id': document_id,
@@ -38,10 +38,10 @@ def create_es_document(
     )
 
 
-def delete_es_document(
+async def delete_es_document(
         document_id: int, es_client: Elasticsearch
 ) -> None:
-    es_client.delete_by_query(
+    await es_client.delete_by_query(
         index=ES_INDEX,
         query={
             'match':
