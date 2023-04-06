@@ -1,10 +1,12 @@
 from pydantic import BaseModel
 from datetime import datetime as dt
+from typing import Optional
 
 
 class DocumentCreateRequest(BaseModel):
     rubrics: list[str]
     text: str
+    created_date: Optional[str] = None
 
 
 class RubricResponse(BaseModel):

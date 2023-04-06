@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 from sqlalchemy.ext.asyncio import AsyncSession
 from elasticsearch import Elasticsearch
 
 from app import schemas
-from app.db import get_session
+from app.db import get_session, storage
 from app.es import get_es_client
 from app import utils
 
@@ -37,3 +37,28 @@ async def create_document(
 ):
     document = await utils.create_document(post_schema, session, es_client)
     return document
+
+
+@search_router.delete(
+    '/{document_id}',
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "description": "Template not found",
+        },
+    }
+)
+async def delete_document(
+        document_id: int,
+        session: AsyncSession = Depends(get_session),
+        es_client: Elasticsearch = Depends(get_es_client)
+):
+    document = await storage.get_document(document_id, session)
+
+    if document:
+        await utils.delete_document(document_id, session, es_client)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Template not found"
+        )

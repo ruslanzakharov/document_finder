@@ -36,3 +36,15 @@ def create_es_document(
             'text': text
         }
     )
+
+
+def delete_es_document(
+        document_id: int, es_client: Elasticsearch
+) -> None:
+    es_client.delete_by_query(
+        index=ES_INDEX,
+        query={
+            'match':
+                {'id': document_id}
+        }
+    )

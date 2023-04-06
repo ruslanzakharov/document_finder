@@ -1,10 +1,8 @@
 from elasticsearch import Elasticsearch
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from sqlalchemy.orm import selectinload
 
 from app.db import Document, storage
-from app.es import es_search, create_es_document
+from app.es import es_search, create_es_document, delete_es_document
 from app import schemas
 
 
@@ -16,14 +14,11 @@ async def get_bd_search_response(
 
     documents = []
     for hit in hits:
-        query = select(Document).where(Document.id == hit['id']).\
-            options(selectinload(Document.rubrics))
-        document = (await session.execute(query)).first()[0]
-
+        document = await storage.get_document(hit['id'], session)
         if document is not None:
             documents.append(document)
 
-    documents.sort(key=lambda doc: doc.created_date)
+    documents.sort(key=lambda doc: doc.created_date, reverse=True)
 
     return documents
 
@@ -42,3 +37,12 @@ async def create_document(
     )
 
     return document
+
+
+async def delete_document(
+        document_id: int,
+        session: AsyncSession,
+        es_client: Elasticsearch
+) -> None:
+    await storage.delete_document(document_id, session)
+    delete_es_document(document_id, es_client)
