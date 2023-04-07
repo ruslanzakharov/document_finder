@@ -46,8 +46,6 @@ def create_document_index() -> None:
     except elasticsearch.BadRequestError:
         pass
 
-    es_client.transport.close()
-
 
 def delete_document_index() -> None:
     """Удаляет индекс в Elasticsearch."""
