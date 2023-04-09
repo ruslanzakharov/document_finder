@@ -26,7 +26,7 @@ poetry install
 poetry shell
 ```
 3. Запустить модуль init_data для инициализации БД тестовыми данными
-(занимает примерно минуту)
+(занимает до 40с)
 ```commandline
 poetry run python3 init_data
 ```
