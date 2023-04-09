@@ -9,8 +9,10 @@ git clone https://github.com/ruslanzakharov/document_finder.git
 ```
 2. Развернуть сервис, запустив в папке проекта команду
 ```commandline
-docker compose up -d
+docker compose up
 ```
+P.s. Для дальнейшей работы подождать, пока не перестанет постоянно появляться
+новые записи в логах (инициализируется Elasticsearch)
 
 ### Инициализация БД данными
 
