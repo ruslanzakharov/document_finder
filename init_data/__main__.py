@@ -14,9 +14,7 @@ async def create_document_request(
         'text': text,
         'created_date': created_date
     }
-
-    async with session.post(url, json=body) as resp:
-        print(resp.status)
+    await session.post(url, json=body)
 
 
 def str_to_rubric_list(string: str) -> list[str]:
@@ -30,7 +28,7 @@ async def load_csv_and_request() -> None:
     tasks = []
 
     async with ClientSession() as session:
-        async with aiofiles.open('posts.csv', 'r') as f:
+        async with aiofiles.open('./init_data/posts.csv', 'r') as f:
             reader = AsyncReader(f)
             await anext(reader)
 
