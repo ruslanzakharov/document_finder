@@ -4,8 +4,6 @@ import time
 
 ES_INDEX = 'document-index'
 
-es_client = AsyncElasticsearch('http://elasticsearch:9200')
-
 index_create_settings = {
   "analysis": {
     "filter": {
@@ -32,14 +30,10 @@ index_create_settings = {
 }
 
 
-def create_document_index() -> None:
+async def create_document_index(es_client: AsyncElasticsearch) -> None:
     """Создает индекс в Elasticsearch."""
-
-    while not es_client.ping():
-        time.sleep(0.5)
-
     try:
-        es_client.indices.create(
+        await es_client.indices.create(
             index=ES_INDEX,
             settings=index_create_settings,
         )
@@ -47,21 +41,21 @@ def create_document_index() -> None:
         pass
 
 
-def delete_document_index() -> None:
+async def delete_document_index(es_client: AsyncElasticsearch) -> None:
     """Удаляет индекс в Elasticsearch."""
     try:
-        es_client.indices.delete(index=ES_INDEX)
+        await es_client.indices.delete(index=ES_INDEX)
     except elasticsearch.NotFoundError:
         pass
 
 
-def wait_connection_to_es() -> None:
+async def wait_connection_to_es(es_client: AsyncElasticsearch) -> None:
     """Останавливает запуск приложения, пока не заработает Elasticsearch."""
-    while not es_client.ping():
+    while not await es_client.ping():
         time.sleep(0.5)
 
 
-def init_es() -> None:
-    wait_connection_to_es()
-    delete_document_index()
-    create_document_index()
+async def init_es(es_client: AsyncElasticsearch) -> None:
+    await wait_connection_to_es(es_client)
+    await delete_document_index(es_client)
+    await create_document_index(es_client)

@@ -157,6 +157,7 @@ optional = false
 python-versions = ">=3.6, <4"
 
 [package.dependencies]
+aiohttp = {version = ">=3,<4", optional = true, markers = "extra == \"async\""}
 elastic-transport = ">=8,<9"
 
 [package.extras]
@@ -366,7 +367,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "98c5bb840db4b2a2cc602cb3f478de81c43684eb8aef05da335edb62300e5f3e"
+content-hash = "6e21576ca1736ed75710bab8c6643e9bfcc6e90a479d750412074e387937d371"
 
 [metadata.files]
 aiocsv = [

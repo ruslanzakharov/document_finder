@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from app.api.v1 import routers
 from app.db import create_db
-from app.es import init_es
+from app.es import init_es, es_client
 
 
 def bind_routers(application: FastAPI) -> None:
@@ -14,9 +14,12 @@ def bind_routers(application: FastAPI) -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_es()
+    await init_es(es_client)
     await create_db()
+
     yield
+
+    await es_client.close()
 
 
 def get_application() -> FastAPI:

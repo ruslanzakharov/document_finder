@@ -11,7 +11,7 @@ fastapi = "^0.95.0"
 uvicorn = "^0.21.1"
 sqlalchemy = "^2.0.8"
 asyncpg = "^0.27.0"
-elasticsearch = "^8.6.2"
+elasticsearch = {version = "8.6.2", extras = ["async"]}
 requests = "^2.28.2"
 aiohttp = "^3.8.4"
 aiofiles = "^23.1.0"
