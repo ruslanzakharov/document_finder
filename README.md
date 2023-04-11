@@ -11,7 +11,7 @@ git clone https://github.com/ruslanzakharov/document_finder.git
 ```commandline
 docker compose up
 ```
-P.s. Для дальнейшей работы подождать, пока не перестанет постоянно появляться
+P.s. Для дальнейшей работы подождать, пока не перестанут постоянно появляться
 новые записи в логах (инициализируется Elasticsearch)
 
 ### Инициализация БД данными
